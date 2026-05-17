@@ -27,15 +27,34 @@
 
 </div>
 
-## 📸 Screenshots
+## 📸 Screenshots & UI Previews
 
 <div align="center">
 
-### 🖥️ Cardiac Statistics Panel — Live Waveform & BPM Readings
+### 🏥 Dashboard Overview & Usage Instructions
+<img src="assets/screen_3.png" alt="CardioSense Hero and Setup Instructions" width="90%"/>
 
-<img src="assets/cardiac_stats.png" alt="Cardiac Statistics Panel - Live waveform with BPM readings" width="90%"/>
+<br/>
+
+### 🖥️ Live Cardiac Statistics Panel
+<img src="assets/screen_4.jpg" alt="Live ECG Waveform and HR Stats" width="90%"/>
 
 > *Live ECG waveform with real-time cardiac statistics — HR 94 BPM (Normal Sinus Rhythm), Max HR, Min HR, Avg HR, and HRV (SDNN) all displayed simultaneously.*
+
+<br/>
+
+### ⚠️ Intelligent Lead-Off Detection
+<img src="assets/screen_2.png" alt="Leads Disconnected Warning Screen" width="90%"/>
+
+<br/>
+
+### 📋 Signal Monitoring Instructions
+<img src="assets/screen_1.png" alt="Signal Monitoring Instructions" width="90%"/>
+
+<br/>
+
+### ⚙️ System Methodology
+<img src="assets/screen_5.png" alt="Methodology Flowchart" width="90%"/>
 
 <br/>
 
@@ -60,7 +79,7 @@
 
 ### Software Pipeline Diagram
 
-<img src="assets/system_architecture.png" alt="CardioSense Software Architecture Diagram" width="88%"/>
+<img src="assets/screen_5.png" alt="CardioSense Software Architecture Diagram" width="88%"/>
 
 </div>
 
@@ -534,8 +553,12 @@ ECG mini project/
 └── 📁 assets/                    ← README documentation images
     ├── 🖼️  heart.png               ← Anatomical ECG heart sticker
     ├── 🖼️  cardiac_stats.png       ← Cardiac statistics panel screenshot
+    ├── 🖼️  screen_1.png            ← Signal Monitoring Instructions
+    ├── 🖼️  screen_2.png            ← Leads Disconnected Warning Screen
+    ├── 🖼️  screen_3.png            ← Dashboard Overview
+    ├── 🖼️  screen_4.jpg            ← Live Cardiac Statistics Panel
+    ├── 🖼️  screen_5.png            ← Methodology Flowchart
     ├── 🖼️  system_arch_real.png    ← Hardware system architecture diagram
-    ├── 🖼️  system_architecture.png ← Software pipeline diagram
     └── 🖼️  wiring_diagram.png      ← Hardware wiring reference
 ```
 
