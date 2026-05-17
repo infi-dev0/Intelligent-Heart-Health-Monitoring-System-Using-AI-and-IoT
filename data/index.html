@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ECG Setup</title>
+  <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+  <img src="/heart.png" alt="ECG Heart" class="corner-sticker">
+  <main class="page">
+    <section class="hero animate delay-0">
+      <p class="eyebrow">Portable Clinical Monitor</p>
+      <h1>CardioSense</h1>
+      <p>
+        By Using IoT and AI, this system monitors heart health in real time, detects possible risks early, and helps people take better care of their heart by providing continuous tracking, accurate insights, and timely alerts for improved health management.
+      </p>
+    </section>
+
+    <section class="story two-col animate delay-1">
+      <div class="illustration">
+        <svg viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g transform="translate(28 8) rotate(-20 104 122)">
+            <rect x="22" y="28" width="160" height="214" rx="12" fill="#ea8a79"/>
+            <rect x="34" y="44" width="136" height="182" rx="8" fill="#fffaf4"/>
+            <rect x="72" y="18" width="60" height="20" rx="8" fill="#adc2de"/>
+            <circle cx="66" cy="84" r="25" fill="#d7e0ef" stroke="#9fb2cd" stroke-width="3"/>
+            <path d="M52 84h28M66 70v28" stroke="#8ea3c4" stroke-width="5" stroke-linecap="round"/>
+            <path d="M52 126h96M52 146h96M52 166h96M52 186h96" stroke="#ea8a79" stroke-width="2"/>
+            <path d="M119 206h16l5-7 8 12 6-9 5 4 8-9h9" fill="none" stroke="#de4f3d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <article class="info-card">
+        <span class="badge coral">01</span>
+        <h2>Prepare Leads and Skin Contact</h2>
+        <p>
+         Ensure the skin is clean and dry.
+         Place the electrodes in correct positions with proper contact.
+         Minimize movement to get a clear ECG signal.
+        </p>
+      </article>
+    </section>
+
+    <!-- ── FULL-WIDTH ECG MONITOR ── -->
+    <section class="monitor-section animate delay-2">
+      <article class="monitor-card">
+        <div class="monitor-shell">
+          <!-- Top status bar -->
+          <div class="monitor-topbar">
+            <div class="monitor-topbar-left">
+              <span id="signalDot" class="signal-dot"></span>
+              <span id="signalState">Connecting</span>
+            </div>
+            <div class="monitor-topbar-center">Lead II</div>
+            <div class="monitor-topbar-right">
+              <span class="param-label">Speed</span>
+              <span class="param-value">25 mm/s</span>
+              <span class="param-sep">|</span>
+              <span class="param-label">Gain</span>
+              <span class="param-value">10 mm/mV</span>
+            </div>
+          </div>
+
+          <!-- ECG Canvas -->
+          <div class="ecg-wrap">
+            <canvas id="ecgCanvas"></canvas>
+            <div id="leadOverlay" class="lead-overlay">
+              <div class="lead-overlay-icon">⚠</div>
+              <div>Leads Disconnected</div>
+              <div class="lead-overlay-sub">Recheck electrode contact to resume tracing</div>
+            </div>
+          </div>
+
+          <!-- Bottom vitals bar -->
+          <div class="monitor-vitals">
+            <div class="vital-block vital-block--hr">
+              <span class="vital-label">HR</span>
+              <span id="hrValue" class="vital-value">--</span>
+              <span class="vital-unit">bpm</span>
+              <span id="hrBadge" class="hr-badge hr-badge--waiting">--</span>
+            </div>
+            <div class="vital-block">
+              <span class="vital-label">SpO₂</span>
+              <span class="vital-value">--</span>
+              <span class="vital-unit">%</span>
+            </div>
+            <div class="vital-block">
+              <span class="vital-label">RR</span>
+              <span class="vital-value">--</span>
+              <span class="vital-unit">ms</span>
+            </div>
+            <div class="vital-block">
+              <span class="vital-label">Lead</span>
+              <span class="vital-value vital-lead">II</span>
+              <span class="vital-unit"></span>
+            </div>
+          </div>
+
+          <!-- HR Status Strip -->
+          <div id="hrStatus" class="hr-status hr-status--waiting">
+            <span id="hrStatusDot" class="hr-status__dot hr-status__dot--waiting"></span>
+            <span id="hrStatusText" class="hr-status__label">Awaiting Data</span>
+            <span class="hr-status__sep">→</span>
+            <span id="hrStatusDesc" class="hr-status__desc">Waiting for stable heart rate signal</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Cardiac Statistics Panel -->
+      <div class="cardiac-stats-panel">
+        <h3 class="stats-panel-title">Cardiac Statistics</h3>
+        <div class="mini-ecg-wrap">
+          <div class="mini-ecg-header">
+            <span class="mini-ecg-label">Live Waveform</span>
+            <span id="miniTraceStatus" class="mini-trace-status">Awaiting Signal</span>
+          </div>
+          <canvas id="miniEcgCanvas"></canvas>
+        </div>
+        <div class="hr-logic-panel">
+          <h4 class="hr-logic-title">Heart Rate Logic</h4>
+          <div class="hr-logic-row hr-logic-row--normal">
+            <span class="hr-logic-range">60–100 BPM</span>
+            <span class="hr-logic-arrow">→</span>
+            <span class="hr-logic-status">✅ Normal</span>
+          </div>
+          <div class="hr-logic-row hr-logic-row--low">
+            <span class="hr-logic-range">&lt; 60 BPM</span>
+            <span class="hr-logic-arrow">→</span>
+            <span class="hr-logic-status">⚠️ Low</span>
+          </div>
+          <div class="hr-logic-row hr-logic-row--high">
+            <span class="hr-logic-range">&gt; 100 BPM</span>
+            <span class="hr-logic-arrow">→</span>
+            <span class="hr-logic-status">⚠️ High</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="story two-col animate delay-3">
+      <article class="info-card">
+        <span class="badge coral">02</span>
+        <h2>Check Live Signal </h2>
+        <p>
+          Check Live Signal
+         Watch the ECG signal on the screen in real time.
+         Make sure the waves are clear and repeating properly.
+         If the signal looks unstable or noisy, adjust the electrodes before continuing.
+        </p>
+      </article>
+      <article class="info-card blue">
+        <span class="badge blue">03</span>
+        <h2> Safe Monitoring </h2>
+        <p>
+        Observe the ECG signal and proceed only when it is clear and steady.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+:root {
+  --bg-page: #eceef2;
+  --bg-panel: #f7f8fc;
+  --ink: #2f4052;
+  --muted: #65758a;
+  --card: #f3efe8;
+  --card-blue: #dbe2f1;
+  --line: #8f9eb2;
+  --accent-coral: #ea8a79;
+  --accent-blue: #8fa2c5;
+  --shadow: 0 18px 35px rgba(64, 75, 95, 0.14);
+  --dash: 1.7px dashed rgba(84, 100, 121, 0.66);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  color: var(--ink);
+  font-family: "Avenir Next", "Trebuchet MS", "Gill Sans", sans-serif;
+  background:
+    radial-gradient(circle at 8% 9%, rgba(144, 161, 193, 0.19), transparent 32%),
+    radial-gradient(circle at 92% 18%, rgba(234, 138, 121, 0.14), transparent 38%),
+    linear-gradient(180deg, #e8ebf1 0%, #eceef2 45%, #e7e8ec 100%);
+}
+
+body {
+  padding: 32px 18px 48px;
+  overflow-x: hidden;
+}
+
+/* ── Corner sticker ── */
+.corner-sticker {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 100px;
+  height: auto;
+  z-index: 100;
+  opacity: 0.88;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.corner-sticker:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.page {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: 34px;
+}
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(165deg, #d4dcea 0%, #ced8e8 44%, #d9deec 100%);
+  border-radius: 22px;
+  padding: 32px clamp(18px, 4vw, 42px);
+  border: var(--dash);
+  box-shadow: var(--shadow);
+}
+
+.hero .eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  color: #4a5a71;
+  font-weight: 700;
+}
+
+.hero h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  color: #2d4054;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 760px;
+  color: #2f4359;
+  font-size: clamp(16px, 2vw, 21px);
+  line-height: 1.6;
+}
+
+/* ── Grid layouts ── */
+.story {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+}
+
+.two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.illustration {
+  display: grid;
+  place-items: center;
+  min-height: 230px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.36);
+  border: 1px solid rgba(142, 158, 180, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), var(--shadow);
+  overflow: hidden;
+  padding: 12px;
+}
+
+.illustration svg {
+  width: min(90%, 310px);
+  height: auto;
+  display: block;
+}
+
+/* ── Info cards ── */
+.info-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 26px 28px;
+  border: var(--dash);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  min-height: 200px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.info-card.blue {
+  background: var(--card-blue);
+}
+
+.info-card h2 {
+  margin: 0;
+  font-size: clamp(22px, 2.8vw, 28px);
+  letter-spacing: 0.01em;
+  line-height: 1.14;
+  color: #30465d;
+}
+
+.info-card p {
+  margin: 0 auto;
+  max-width: 46ch;
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.62;
+  color: #334a61;
+}
+
+.badge {
+  position: absolute;
+  top: -18px;
+  right: -14px;
+  min-width: 74px;
+  text-align: center;
+  border-radius: 12px;
+  padding: 9px 14px 8px;
+  font-size: 46px;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 10px 18px rgba(80, 95, 122, 0.24);
+}
+
+.badge.coral { background: var(--accent-coral); }
+.badge.blue  { background: var(--accent-blue); }
+
+/* ══════════════════════════════════════════
+   HOSPITAL ECG MONITOR SECTION
+   ══════════════════════════════════════════ */
+.monitor-section {
+  display: grid;
+  gap: 20px;
+}
+
+.monitor-card {
+  border-radius: 20px;
+  background: linear-gradient(180deg, #0f1a12, #080e09);
+  border: 1px solid rgba(51, 255, 102, 0.12);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(51, 255, 102, 0.06);
+  padding: 0;
+  overflow: hidden;
+}
+
+.monitor-shell {
+  display: grid;
+}
+
+/* ── Top status bar ── */
+.monitor-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: rgba(8, 18, 10, 0.9);
+  border-bottom: 1px solid rgba(51, 255, 102, 0.1);
+  font-family: "Consolas", "SF Mono", "Monaco", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #88cc99;
+}
+
+.monitor-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monitor-topbar-center {
+  color: #33ff66;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.monitor-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(136, 204, 153, 0.6);
+}
+
+.param-label { font-size: 9px; opacity: 0.6; }
+.param-value { color: #88cc99; font-size: 11px; }
+.param-sep   { opacity: 0.3; }
+
+/* ── ECG Canvas area ── */
+.ecg-wrap {
+  position: relative;
+  background: #0a0f0a;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+#ecgCanvas {
+  width: 100%;
+  height: 400px;
+  display: block;
+  background: #0a0f0a;
+}
+
+/* ── Leads overlay ── */
+.lead-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #ff6644;
+  background: rgba(6, 10, 6, 0.88);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  padding: 18px;
+  gap: 6px;
+  font-family: "Consolas", "SF Mono", monospace;
+}
+
+.lead-overlay.visible { opacity: 1; }
+
+.lead-overlay-icon {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.lead-overlay-sub {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255, 102, 68, 0.6);
+  text-transform: none;
+}
+
+/* ── Bottom vitals bar ── */
+.monitor-vitals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: rgba(8, 18, 10, 0.9);
+  border-top: 1px solid rgba(51, 255, 102, 0.1);
+  font-family: "Consolas", "SF Mono", "Monaco", monospace;
+}
+
+.vital-block {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 14px 28px;
+  border-right: 1px solid rgba(51, 255, 102, 0.08);
+}
+
+.vital-block:last-child { border-right: none; }
+
+.vital-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(136, 204, 153, 0.5);
+  font-weight: 400;
+}
+
+.vital-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #33ff66;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(51, 255, 102, 0.3);
+}
+
+.vital-lead {
+  color: #88cc99;
+  font-size: 18px;
+  text-shadow: none;
+}
+
+.vital-unit {
+  font-size: 11px;
+  color: rgba(136, 204, 153, 0.4);
+  letter-spacing: 0.08em;
+}
+
+/* ── Signal dot ── */
+.signal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #33ff66;
+  box-shadow: 0 0 10px rgba(51, 255, 102, 0.7);
+  animation: pulse 1.15s ease-in-out infinite;
+  display: inline-block;
+}
+
+.signal-dot.warn {
+  background: #ff6644;
+  box-shadow: 0 0 10px rgba(255, 102, 68, 0.6);
+  animation: none;
+}
+
+#signalState {
+  font-size: 10px;
+  color: #88cc99;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════════
+   HR STATUS STRIP
+   ══════════════════════════════════════════ */
+.hr-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(6, 14, 8, 0.95);
+  border-top: 1px solid rgba(51, 255, 102, 0.06);
+  font-family: "Consolas", "SF Mono", "Monaco", monospace;
+  transition: background 0.4s ease;
+}
+
+/* Status dot */
+.hr-status__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #555;
+  box-shadow: 0 0 6px rgba(85, 85, 85, 0.4);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hr-status__dot--normal {
+  background: #33ff66;
+  box-shadow: 0 0 10px rgba(51, 255, 102, 0.6);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.hr-status__dot--tachycardia {
+  background: #ff6b6b;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.6);
+  animation: pulse 0.7s ease-in-out infinite;
+}
+
+.hr-status__dot--bradycardia {
+  background: #ffa726;
+  box-shadow: 0 0 10px rgba(255, 167, 38, 0.6);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hr-status__dot--waiting {
+  background: #555;
+  box-shadow: none;
+  animation: none;
+}
+
+/* Label text */
+.hr-status__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #88cc99;
+  transition: color 0.4s ease;
+}
+
+.hr-status--normal .hr-status__label { color: #33ff66; }
+.hr-status--tachycardia .hr-status__label { color: #ff6b6b; }
+.hr-status--bradycardia .hr-status__label { color: #ffa726; }
+.hr-status--waiting .hr-status__label { color: #556; }
+
+/* Separator */
+.hr-status__sep {
+  font-size: 10px;
+  color: rgba(136, 204, 153, 0.2);
+}
+
+/* Description */
+.hr-status__desc {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(136, 204, 153, 0.45);
+  transition: color 0.4s ease;
+}
+
+.hr-status--tachycardia .hr-status__desc { color: rgba(255, 107, 107, 0.5); }
+.hr-status--bradycardia .hr-status__desc { color: rgba(255, 167, 38, 0.5); }
+.hr-status--normal .hr-status__desc { color: rgba(51, 255, 102, 0.4); }
+
+/* ══════════════════════════════════════════
+   CARDIAC STATISTICS PANEL
+   ══════════════════════════════════════════ */
+.cardiac-stats-panel {
+  background: linear-gradient(180deg, #0c140e, #080e09);
+  border-radius: 16px;
+  border: 1px solid rgba(51, 255, 102, 0.1);
+  padding: 20px 24px 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.stats-panel-title {
+  margin: 0 0 16px;
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(136, 204, 153, 0.55);
+  font-weight: 400;
+}
+
+/* ── Heart Rate Logic Panel ── */
+.hr-logic-panel {
+  background: linear-gradient(145deg, rgba(8, 16, 10, 0.95), rgba(6, 12, 8, 0.98));
+  border: 1px solid rgba(51, 255, 102, 0.1);
+  border-radius: 14px;
+  padding: 22px 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hr-logic-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(51, 255, 102, 0.2), transparent);
+}
+
+.hr-logic-title {
+  margin: 0 0 18px;
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(136, 204, 153, 0.6);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hr-logic-title::before {
+  content: '♡';
+  font-size: 13px;
+  color: rgba(51, 255, 102, 0.5);
+}
+
+.hr-logic-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hr-logic-row:last-child {
+  margin-bottom: 0;
+}
+
+.hr-logic-row:hover {
+  transform: translateX(4px);
+}
+
+/* ── Normal row ── */
+.hr-logic-row--normal {
+  background: rgba(51, 255, 102, 0.04);
+  border: 1px solid rgba(51, 255, 102, 0.1);
+  border-left: 3px solid rgba(51, 255, 102, 0.6);
+}
+.hr-logic-row--normal:hover {
+  box-shadow: 0 4px 16px rgba(51, 255, 102, 0.08);
+}
+
+/* ── Low row ── */
+.hr-logic-row--low {
+  background: rgba(255, 167, 38, 0.04);
+  border: 1px solid rgba(255, 167, 38, 0.1);
+  border-left: 3px solid rgba(255, 167, 38, 0.6);
+}
+.hr-logic-row--low:hover {
+  box-shadow: 0 4px 16px rgba(255, 167, 38, 0.08);
+}
+
+/* ── High row ── */
+.hr-logic-row--high {
+  background: rgba(255, 107, 107, 0.04);
+  border: 1px solid rgba(255, 107, 107, 0.1);
+  border-left: 3px solid rgba(255, 107, 107, 0.6);
+}
+.hr-logic-row--high:hover {
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.08);
+}
+
+/* Bottom shimmer accent on each row */
+.hr-logic-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(51, 255, 102, 0.15), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+.hr-logic-row--low::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 167, 38, 0.15), transparent);
+}
+.hr-logic-row--high::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.15), transparent);
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; transform: translateX(-30%); }
+  50% { opacity: 1; transform: translateX(30%); }
+}
+
+.hr-logic-range {
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  min-width: 110px;
+  color: #d4e8d8;
+}
+
+.hr-logic-arrow {
+  font-size: 16px;
+  color: rgba(136, 204, 153, 0.3);
+  flex-shrink: 0;
+}
+
+.hr-logic-status {
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hr-logic-row--normal .hr-logic-range { color: rgba(51, 255, 102, 0.9); }
+.hr-logic-row--normal .hr-logic-status { color: #33ff66; text-shadow: 0 0 10px rgba(51, 255, 102, 0.25); }
+
+.hr-logic-row--low .hr-logic-range { color: rgba(255, 167, 38, 0.9); }
+.hr-logic-row--low .hr-logic-status { color: #ffa726; text-shadow: 0 0 10px rgba(255, 167, 38, 0.25); }
+
+.hr-logic-row--high .hr-logic-range { color: rgba(255, 107, 107, 0.9); }
+.hr-logic-row--high .hr-logic-status { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.25); }
+
+/* ══════════════════════════════════════════
+   HR VALUE COLOR CODING
+   ══════════════════════════════════════════ */
+.vital-value.hr-color-normal {
+  color: #33ff66;
+  text-shadow: 0 0 14px rgba(51, 255, 102, 0.4);
+}
+.vital-value.hr-color-warning {
+  color: #ffa726;
+  text-shadow: 0 0 14px rgba(255, 167, 38, 0.4);
+}
+.vital-value.hr-color-critical {
+  color: #ff6b6b;
+  text-shadow: 0 0 14px rgba(255, 107, 107, 0.4);
+  animation: hrCriticalPulse 1s ease-in-out infinite;
+}
+@keyframes hrCriticalPulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; text-shadow: 0 0 22px rgba(255, 107, 107, 0.7); }
+}
+
+/* ── HR Badge ── */
+.vital-block--hr { position: relative; flex-wrap: wrap; }
+.hr-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  transition: all 0.4s ease;
+  vertical-align: middle;
+}
+.hr-badge--waiting { background: rgba(85,85,85,0.15); color: #555; border: 1px solid rgba(85,85,85,0.25); }
+.hr-badge--normal  { background: rgba(51,255,102,0.1); color: #33ff66; border: 1px solid rgba(51,255,102,0.3); box-shadow: 0 0 8px rgba(51,255,102,0.12); }
+.hr-badge--warning { background: rgba(255,167,38,0.1); color: #ffa726; border: 1px solid rgba(255,167,38,0.3); box-shadow: 0 0 8px rgba(255,167,38,0.12); }
+.hr-badge--critical {
+  background: rgba(255,107,107,0.1); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3);
+  box-shadow: 0 0 8px rgba(255,107,107,0.12);
+  animation: criticalBadgePulse 1s ease-in-out infinite;
+}
+@keyframes criticalBadgePulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,107,107,0.12); }
+  50% { box-shadow: 0 0 18px rgba(255,107,107,0.4); }
+}
+
+/* ══════════════════════════════════════════
+   MINI ECG WAVEFORM
+   ══════════════════════════════════════════ */
+.mini-ecg-wrap {
+  margin-bottom: 18px;
+  border-radius: 10px;
+  background: rgba(8, 14, 10, 0.9);
+  border: 1px solid rgba(51, 255, 102, 0.08);
+  overflow: hidden;
+}
+.mini-ecg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(6, 12, 8, 0.95);
+  border-bottom: 1px solid rgba(51, 255, 102, 0.06);
+}
+.mini-ecg-label {
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(136, 204, 153, 0.5);
+}
+.mini-trace-status {
+  font-family: "Consolas", "SF Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(136, 204, 153, 0.3);
+  transition: color 0.3s ease;
+}
+.mini-trace-status.active { color: #33ff66; }
+#miniEcgCanvas {
+  width: 100%;
+  height: 120px;
+  display: block;
+  background: #0a0f0a;
+}
+
+
+/* ── Animations ── */
+.animate {
+  opacity: 0;
+  transform: translateY(22px) scale(0.992);
+  animation: rise 0.7s cubic-bezier(0.21, 0.75, 0.28, 1) forwards;
+}
+
+.delay-0 { animation-delay: 0.06s; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.34s; }
+.delay-3 { animation-delay: 0.48s; }
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.84; }
+  50% { transform: scale(1.16); opacity: 1; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 920px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card,
+  .illustration {
+    min-height: 0;
+  }
+
+  .badge {
+    top: -14px;
+    right: 10px;
+    font-size: 42px;
+  }
+
+  .monitor-topbar-right {
+    display: none;
+  }
+
+  .hr-logic-row {
+    gap: 10px;
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 20px 10px 34px;
+  }
+
+  .hero {
+    padding: 22px 16px;
+  }
+
+  .info-card {
+    padding: 20px 16px;
+  }
+
+  #ecgCanvas {
+    height: 300px;
+  }
+
+  .ecg-wrap {
+    min-height: 300px;
+  }
+
+  .vital-block {
+    padding: 10px 14px;
+  }
+
+  .vital-value {
+    font-size: 28px;
+  }
+
+  .monitor-vitals {
+    flex-wrap: wrap;
+  }
+
+  .hr-logic-panel {
+    padding: 14px 16px;
+  }
+
+  .hr-logic-range {
+    font-size: 12px;
+    min-width: 90px;
+  }
+
+  .hr-logic-status {
+    font-size: 11px;
+  }
+}
