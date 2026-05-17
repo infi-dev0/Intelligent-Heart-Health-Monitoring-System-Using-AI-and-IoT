@@ -48,37 +48,10 @@
 
 ## 🏗️ System Architecture
 
-<div align="center">
-<img src="assets/system_architecture.png" alt="CardioSense System Architecture Diagram" width="88%"/>
-</div>
+
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    CARDIOSENSE — DATA FLOW                          │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  [Patient Electrodes]                                               │
-│       ↓  (analog bio-signal)                                        │
-│  [AD8232 ECG Sensor]  ──── amplifies & filters analog ECG          │
-│       ↓  (0–3.3V analog)                                           │
-│  [ESP32 GPIO 34]  ─────── 12-bit ADC @ 500 Hz sampling            │
-│       ↓  (raw int 0–4095)                                          │
-│  [DSP Notch Filter]  ──── kills 50 Hz + 60 Hz mains hum            │
-│       ↓                                                             │
-│  [Moving Average] ──────── 5-sample MA + variance check            │
-│       ↓                                                             │
-│  [R-Peak Detector] ─────── adaptive threshold BPM calc             │
-│       ↓                                                             │
-│  [Ring Buffer 3000]  ───── circular sample store                   │
-│       ↓  (JSON /ecg endpoint)                                      │
-│  [ESP32 WebServer]  ────── LittleFS serves HTML/CSS/JS             │
-│       ↓  (HTTP GET every 80ms)                                     │
-│  [Browser Canvas]  ─────── phosphor-green sweep ECG trace          │
-│       ↓                                                             │
-│  [HR Classification]  ──── Normal / Bradycardia / Tachycardia      │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
+
 
 ---
 
@@ -86,18 +59,7 @@
 
 | Feature | Details |
 |---|---|
-| 📡 **Wi-Fi Access Point** | ESP32 creates its own hotspot — no router needed |
-| 📈 **500 Hz Sampling** | 12-bit ADC for clinical-grade resolution |
-| 🎛️ **DSP Dual Notch Filter** | Hardware-grade 50 Hz **and** 60 Hz mains hum removal |
-| 🫀 **Adaptive R-Peak BPM** | Pan-Tompkins-inspired threshold with 8-beat averaging |
-| 🌐 **Browser-Native UI** | Hospital phosphor-green ECG on HTML5 Canvas — no app needed |
-| 📊 **Cardiac Statistics** | Live HRV (SDNN), Max/Min/Avg HR tracking |
-| 🔄 **Auto-Gain Scaling** | Signal automatically scales regardless of ADC offset |
-| ⚠️ **Lead-Off Detection** | Software variance check + hardware LO+/LO- pins |
-| 💾 **LittleFS File System** | Serves full web app directly from ESP32 flash |
-| 📱 **Fully Responsive** | Works on mobile, tablet, and desktop |
-
----
+--
 
 ## 🔩 Hardware Requirements
 
@@ -338,68 +300,7 @@ The ESP32 exposes a simple HTTP API:
 
 ---
 
-## 🧠 DSP & Signal Processing — Technical Deep Dive
-
-### Filter Chain (in `main.cpp`)
-
-```
-Raw ADC (12-bit, 0–4095)
-        │
-        ▼
-  ┌─────────────────────────────────────┐
-  │  Notch Filter 1 — 50 Hz            │
-  │  Moving average, window = 10       │
-  │  At 500 Hz → nulls 50 Hz exactly   │
-  └──────────────┬──────────────────────┘
-                 │
-        ▼
-  ┌─────────────────────────────────────┐
-  │  Notch Filter 2 — 60 Hz            │
-  │  Moving average, window = 8        │
-  │  At 500 Hz → nulls 60 Hz exactly   │
-  └──────────────┬──────────────────────┘
-                 │
-        ▼
-  Filtered Sample → Ring Buffer (3000 samples)
-        │
-        ▼
-  Dynamic Midline Tracking (EMA α=0.001)
-        │
-        ▼
-  R-Peak Detection (adaptive threshold = RMS × 2.2)
-        │
-        ▼
-  8-Beat RR Interval Averaging → BPM
-```
-
-### Client-Side Processing (in `app.js`)
-
-```
-JSON Samples Received (up to 48/poll)
-        │
-        ▼
-  Client Dynamic Midline (EMA α=0.0015)
-        │
-        ▼
-  12-Sample Moving Average (additional smoothing)
-        │
-        ▼
-  Auto-Gain Envelope Tracker (envelope × 0.998 decay)
-        │
-        ▼
-  Canvas Y-Mapping: center − deviation × gain
-        │
-        ▼
-  Phosphor Sweep Render (glow layer + core trace)
-        │
-        ▼
-  Adaptive R-Peak BPM (RMS deviation threshold)
-        │
-        ▼
-  HR Classification: Normal / Low / High + SDNN HRV
-```
-
----
+##
 
 ## 📊 Heart Rate Classification Logic
 
