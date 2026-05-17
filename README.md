@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Platform-ESP32-red?style=for-the-badge&logo=espressif&logoColor=white"/>
   <img src="https://img.shields.io/badge/Framework-Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white"/>
   <img src="https://img.shields.io/badge/Build-PlatformIO-FF7F00?style=for-the-badge&logo=platformio&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Sensor-AD8232-green?style=for-the-badge&logo=heart&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Sensor-AD8232-green?style=for-the-badge&logoColor=white"/>
   <img src="https://img.shields.io/badge/Language-C%2B%2B%20%7C%20JavaScript-blue?style=for-the-badge&logo=cplusplus&logoColor=white"/>
   <img src="https://img.shields.io/badge/WiFi-Hotspot%20AP-orange?style=for-the-badge&logo=wifi&logoColor=white"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
@@ -31,7 +31,7 @@
 
 <div align="center">
 
-### 🖥️ Live ECG Dashboard — Cardiac Statistics Panel
+### 🖥️ Cardiac Statistics Panel — Live Waveform & BPM Readings
 
 <img src="assets/cardiac_stats.png" alt="Cardiac Statistics Panel - Live waveform with BPM readings" width="90%"/>
 
@@ -48,10 +48,49 @@
 
 ## 🏗️ System Architecture
 
+<div align="center">
 
+### Hardware Data Flow — AD8232 → ESP32 → AI/ML → Dashboard
+
+<img src="assets/system_arch_real.png" alt="CardioSense Full System Architecture: AD8232 + ESP32 + AI/ML + User Dashboard" width="88%"/>
+
+> *Complete system architecture: The AD8232 ECG sensor and MAX30102 SpO₂ sensor feed into the ESP32 microcontroller, which applies AI/ML signal processing and serves the result to the user dashboard via Wi-Fi.*
+
+<br/>
+
+### Software Pipeline Diagram
+
+<img src="assets/system_architecture.png" alt="CardioSense Software Architecture Diagram" width="88%"/>
+
+</div>
 
 ```
-
+┌─────────────────────────────────────────────────────────────────────┐
+│                    CARDIOSENSE — DATA FLOW                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  [Patient Electrodes]                                               │
+│       ↓  (analog bio-signal)                                        │
+│  [AD8232 ECG Sensor]  ──── amplifies & filters analog ECG          │
+│       ↓  (0–3.3V analog)                                           │
+│  [ESP32 GPIO 34]  ─────── 12-bit ADC @ 500 Hz sampling            │
+│       ↓  (raw int 0–4095)                                          │
+│  [DSP Notch Filter]  ──── kills 50 Hz + 60 Hz mains hum            │
+│       ↓                                                             │
+│  [Moving Average] ──────── 5-sample MA + variance check            │
+│       ↓                                                             │
+│  [R-Peak Detector] ─────── adaptive threshold BPM calc             │
+│       ↓                                                             │
+│  [Ring Buffer 3000]  ───── circular sample store                   │
+│       ↓  (JSON /ecg endpoint)                                      │
+│  [ESP32 WebServer]  ────── LittleFS serves HTML/CSS/JS             │
+│       ↓  (HTTP GET every 80ms)                                     │
+│  [Browser Canvas]  ─────── phosphor-green sweep ECG trace          │
+│       ↓                                                             │
+│  [HR Classification]  ──── Normal / Bradycardia / Tachycardia      │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -59,7 +98,18 @@
 
 | Feature | Details |
 |---|---|
---
+| 📡 **Wi-Fi Access Point** | ESP32 creates its own hotspot — no router needed |
+| 📈 **500 Hz Sampling** | 12-bit ADC for clinical-grade resolution |
+| 🎛️ **DSP Dual Notch Filter** | Hardware-grade 50 Hz **and** 60 Hz mains hum removal |
+| 🫀 **Adaptive R-Peak BPM** | Pan-Tompkins-inspired threshold with 8-beat averaging |
+| 🌐 **Browser-Native UI** | Hospital phosphor-green ECG on HTML5 Canvas — no app needed |
+| 📊 **Cardiac Statistics** | Live HRV (SDNN), Max/Min/Avg HR tracking |
+| 🔄 **Auto-Gain Scaling** | Signal automatically scales regardless of ADC offset |
+| ⚠️ **Lead-Off Detection** | Software variance check + hardware LO+/LO- pins |
+| 💾 **LittleFS File System** | Serves full web app directly from ESP32 flash |
+| 📱 **Fully Responsive** | Works on mobile, tablet, and desktop |
+
+---
 
 ## 🔩 Hardware Requirements
 
@@ -158,8 +208,8 @@ pio --version
 
 ```bash
 # If using Git
-git clone https://github.com/YOUR_USERNAME/ecg-mini-project.git
-cd "ecg-mini-project"
+git clone https://github.com/infi-dev0/Intelligent-Heart-Health-Monitoring-System-Using-AI-and-IoT.git
+cd "Intelligent-Heart-Health-Monitoring-System-Using-AI-and-IoT"
 
 # Or simply open the folder in VS Code
 code "ECG mini project"
@@ -300,7 +350,68 @@ The ESP32 exposes a simple HTTP API:
 
 ---
 
-##
+## 🧠 DSP & Signal Processing — Technical Deep Dive
+
+### Filter Chain (in `main.cpp`)
+
+```
+Raw ADC (12-bit, 0–4095)
+        │
+        ▼
+  ┌─────────────────────────────────────┐
+  │  Notch Filter 1 — 50 Hz            │
+  │  Moving average, window = 10       │
+  │  At 500 Hz → nulls 50 Hz exactly   │
+  └──────────────┬──────────────────────┘
+                 │
+        ▼
+  ┌─────────────────────────────────────┐
+  │  Notch Filter 2 — 60 Hz            │
+  │  Moving average, window = 8        │
+  │  At 500 Hz → nulls 60 Hz exactly   │
+  └──────────────┬──────────────────────┘
+                 │
+        ▼
+  Filtered Sample → Ring Buffer (3000 samples)
+        │
+        ▼
+  Dynamic Midline Tracking (EMA α=0.001)
+        │
+        ▼
+  R-Peak Detection (adaptive threshold = RMS × 2.2)
+        │
+        ▼
+  8-Beat RR Interval Averaging → BPM
+```
+
+### Client-Side Processing (in `app.js`)
+
+```
+JSON Samples Received (up to 48/poll)
+        │
+        ▼
+  Client Dynamic Midline (EMA α=0.0015)
+        │
+        ▼
+  12-Sample Moving Average (additional smoothing)
+        │
+        ▼
+  Auto-Gain Envelope Tracker (envelope × 0.998 decay)
+        │
+        ▼
+  Canvas Y-Mapping: center − deviation × gain
+        │
+        ▼
+  Phosphor Sweep Render (glow layer + core trace)
+        │
+        ▼
+  Adaptive R-Peak BPM (RMS deviation threshold)
+        │
+        ▼
+  HR Classification: Normal / Low / High + SDNN HRV
+```
+
+---
 
 ## 📊 Heart Rate Classification Logic
 
@@ -421,10 +532,11 @@ ECG mini project/
 │   └── 🖼️  heart.png             ← Anatomical ECG heart sticker
 │
 └── 📁 assets/                    ← README documentation images
-    ├── 🖼️  heart.png
-    ├── 🖼️  cardiac_stats.png     ← Live dashboard screenshot
-    ├── 🖼️  wiring_diagram.png    ← Hardware wiring reference
-    └── 🖼️  system_architecture.png
+    ├── 🖼️  heart.png               ← Anatomical ECG heart sticker
+    ├── 🖼️  cardiac_stats.png       ← Cardiac statistics panel screenshot
+    ├── 🖼️  system_arch_real.png    ← Hardware system architecture diagram
+    ├── 🖼️  system_architecture.png ← Software pipeline diagram
+    └── 🖼️  wiring_diagram.png      ← Hardware wiring reference
 ```
 
 ---
